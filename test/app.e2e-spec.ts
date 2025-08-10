@@ -5,6 +5,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from 'src/user/dto';
+import { createBookmarkDto } from 'src/bookmark/dto';
 
 describe('App e2e', () => {
   let app: INestApplication;
@@ -32,7 +33,7 @@ describe('App e2e', () => {
 
   describe('Auth', () => {
     const dto: AuthDto = {
-      email: 'user1@gmail.com',
+      email: 'user2@gmail.com',
       password: 'Jurome@21',
     };
     describe('Sign Up', () => {
@@ -127,8 +128,8 @@ describe('App e2e', () => {
     describe('Edit Profile', () => {
       it('should edit user', () => {
         const dto: EditUserDto = {
-          email: 'juromefernando@gmail.com',
-          firstName: 'Jurome',
+          email: 'user3@gmail.com',
+          firstName: 'Jurome1',
         };
         return pactum
           .spec()
@@ -143,9 +144,37 @@ describe('App e2e', () => {
     });
   });
   describe('Bookmark', () => {
-    describe('Create Bookmark', () => {});
+    describe('Get empty bookmarks', () => {
+      it('should get bookmarks', () => {
+        return pactum
+          .spec()
+          .get('/bookmarks')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .expectStatus(200)
+          .expectBody([]);
+      });
+    });
+    describe('Create Bookmark', () => {
+      const dto: createBookmarkDto = {
+        title: 'Authorization',
+        description: 'Authorization',
+        link: 'https://open.spotify.com/track/2B5ey0F0QtFKNIR48vfvNJ?si=cd13daeb46cc46c5',
+      };
+      it('should create a bookmark', () => {
+        return pactum
+          .spec()
+          .post('/bookmarks')
+          .withHeaders({
+            Authorization: 'Bearer $S{userAt}',
+          })
+          .withBody(dto)
+          .expectStatus(201)
+          .inspect();
+      });
+    });
     describe('Get Bookmark by ID', () => {});
-    describe('Get Bookmarks', () => {});
     describe('Delete Bookmark', () => {});
   });
 

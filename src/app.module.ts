@@ -4,7 +4,6 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { BookmarkModule } from './bookmark/bookmark.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { BookmarService } from './bookmar/bookmar.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,6 +14,5 @@ import { BookmarService } from './bookmar/bookmar.service';
     BookmarkModule,
     PrismaModule,
   ],
-  providers: [BookmarService],
 })
 export class AppModule {}
